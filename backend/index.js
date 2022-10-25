@@ -1,11 +1,21 @@
 import express from "express";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 import { dbConnection } from "./db/conn.js";
-
-dotenv.config();
-dbConnection();
+import { getPosts } from "./routes/posts.js";
 
 const app = express();
-
 const port = process.env.PORT || 8080;
-app.listen(() => console.log(`App listening on port: ${port}`));
+dotenv.config();
+
+dbConnection();
+
+// create application/json parser
+const jsonParser = bodyParser.json();
+
+// create application/x-www-form-urlencoded parser
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+app.get("/", urlencodedParser, getPosts);
+
+app.listen(port, () => console.log(`Server running on port: ${port}`));
