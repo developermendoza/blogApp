@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Button, Form, Container, Row, Col } from "react-bootstrap";
+// import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {
@@ -50,7 +50,7 @@ function App() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log("user: ", user);
+        // console.log("user: ", user);
         // ...
       })
       .catch((error) => {
@@ -110,71 +110,53 @@ function App() {
 
   return (
     <div className="App">
-      <Container>
-        <ul>
-          {posts.map((post) => (
-            <li key={post.id}>{post.title}</li>
-          ))}
-        </ul>
-        <Form onSubmit={handleNewPostSubmit}>
-          <Form.Group className="mb-3" controlId="postTitle">
-            <Form.Control
-              type="text"
-              placeholder="Post Title"
-              value={newPost.title}
-              name="title"
-              onChange={handlePostChange}
-            />
-          </Form.Group>
+      {/* <Container> */}
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+      <form action="" onSubmit={handleNewPostSubmit}>
+        <input
+          type="text"
+          placeholder="Post Title"
+          value={newPost.title}
+          name="title"
+          onChange={handlePostChange}
+        />
+        <textarea
+          id=""
+          cols="30"
+          rows="10"
+          placeholder="Leave a post here"
+          style={{ height: "100px" }}
+          name="body"
+          value={newPost.body}
+          onChange={handlePostChange}
+        ></textarea>
+        <button type="submit">Submit Post</button>
+      </form>
 
-          <Form.Group className="mb-3" controlId="postBody">
-            <Form.Control
-              as="textarea"
-              placeholder="Leave a post here"
-              style={{ height: "100px" }}
-              name="body"
-              value={newPost.body}
-              onChange={handlePostChange}
-            />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit Post
-          </Button>
-        </Form>
+      <hr />
+      <form action="" onSubmit={handleSignupSubmit}>
+        <input
+          type="email"
+          placeholder="Enter email"
+          value={newUser.email}
+          name="email"
+          onChange={handleNewUserChange}
+        />
 
-        <hr />
-        <Form onSubmit={handleSignupSubmit}>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3" controlId="userEmail">
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  value={newUser.email}
-                  name="email"
-                  onChange={handleNewUserChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="userPassword">
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  autoComplete="off"
-                  name="password"
-                  value={newUser.password}
-                  onChange={handleNewUserChange}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Button variant="primary" type="submit">
-            Register
-          </Button>
-        </Form>
-      </Container>
+        <input
+          type="password"
+          placeholder="Password"
+          autoComplete="off"
+          name="password"
+          value={newUser.password}
+          onChange={handleNewUserChange}
+        />
+        <button type="submit">Register</button>
+      </form>
     </div>
   );
 }
