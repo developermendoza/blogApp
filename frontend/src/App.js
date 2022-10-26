@@ -10,6 +10,7 @@ import {
   getDoc,
   addDoc,
 } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBGwtSUTJ_W9rO2QLcHWTfz76U9GOOPRi0",
@@ -30,10 +31,36 @@ const initialStateNewPost = {
   title: "",
   body: "",
 };
+
+const initialStateNewUser = {
+  email: "",
+  password: "",
+};
 // const snapshot = await getDocs(postsCol);
 function App() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState(initialStateNewPost);
+  const [newUser, setNewUser] = useState(initialStateNewUser);
+
+  const handleSignupSubmit = (e) => {
+    e.preventDefault();
+    console.log("new user: ", newUser);
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("user: ", user);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("errorCode: ", errorCode);
+        console.log("errorMessage: ", errorMessage);
+        // ..
+      });
+  };
 
   const getPosts = async (db) => {
     const postsCol = collection(db, "posts");
@@ -67,7 +94,15 @@ function App() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleNewUserChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser({
+      ...newUser,
+      [name]: value,
+    });
+  };
+
+  const handleNewPostSubmit = (e) => {
     e.preventDefault();
     addPost(newPost);
     setNewPost(initialStateNewPost);
@@ -81,8 +116,8 @@ function App() {
             <li key={post.id}>{post.title}</li>
           ))}
         </ul>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form onSubmit={handleNewPostSubmit}>
+          <Form.Group className="mb-3" controlId="postTitle">
             <Form.Control
               type="text"
               placeholder="Post Title"
@@ -92,7 +127,7 @@ function App() {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3" controlId="postBody">
             <Form.Control
               as="textarea"
               placeholder="Leave a post here"
@@ -103,7 +138,40 @@ function App() {
             />
           </Form.Group>
           <Button variant="primary" type="submit">
-            Submit
+            Submit Post
+          </Button>
+        </Form>
+
+        <hr />
+        <Form onSubmit={handleSignupSubmit}>
+          <Row>
+            <Col>
+              <Form.Group className="mb-3" controlId="userEmail">
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  value={newUser.email}
+                  name="email"
+                  onChange={handleNewUserChange}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className="mb-3" controlId="userPassword">
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  autoComplete="off"
+                  name="password"
+                  value={newUser.password}
+                  onChange={handleNewUserChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Button variant="primary" type="submit">
+            Register
           </Button>
         </Form>
       </Container>
