@@ -1,24 +1,36 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { db } from "../firebase";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { TextField, FormControl, Grid, Button, Container } from "@mui/material";
+import {
+  TextField,
+  FormControl,
+  Grid,
+  Button,
+  Container,
+  fabClasses,
+  formLabelClasses,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import IconButton from "@mui/material/IconButton";
 
 db();
 
+const initialStateNewUser = {
+  email: "",
+  password: "",
+};
 const Register = () => {
-  const initialStateNewUser = {
-    email: "",
-    password: "",
-    confirmPassword: "",
-  };
-
   const [newUser, setNewUser] = useState(initialStateNewUser);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,15 +40,17 @@ const Register = () => {
     });
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setLoading(true);
-
-    if (newUser.password !== newUser.confirmPassword) {
-      setLoading(false);
-      return setError("Passwords do not match");
-    }
 
     const submitNewUser = {
       email: newUser.email,
@@ -51,6 +65,16 @@ const Register = () => {
     )
       .then((userCredential) => {
         const user = userCredential.user;
+        console.log("user: ", user);
+
+        // navigate to a (private component) page where there is another form - profile -tells the user to fillout to start posting
+        // save the email on the users database
+        // it keeps the user logged in for 1 hour if idle
+        // /profile
+        // /new-post
+
+        setNewUser(initialStateNewUser);
+        setError("");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -59,7 +83,6 @@ const Register = () => {
       })
       .finally(() => {
         setLoading(false);
-        setNewUser(initialStateNewUser);
       });
   };
 
@@ -97,29 +120,28 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <TextField
-                  helperText=""
-                  id="password"
-                  error={error !== ""}
-                  name="password"
-                  label="Password"
-                  type="password"
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
                   value={newUser.password}
+                  name="password"
                   onChange={handleChange}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <TextField
-                  helperText=""
-                  id="confirmPassword"
-                  error={error !== ""}
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  value={newUser.confirmPassword}
-                  onChange={handleChange}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
                 />
               </FormControl>
             </Grid>
