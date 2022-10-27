@@ -5,17 +5,7 @@ import { db } from "../firebase";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Input,
-  FormHelperText,
-  Grid,
-  Item,
-  Button,
-  Container,
-} from "@mui/material";
+import { TextField, FormControl, Grid, Button, Container } from "@mui/material";
 
 db();
 
