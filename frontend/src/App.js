@@ -18,6 +18,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import Home from "./routes/Home";
 import About from "./routes/About";
 import Navbar from "./components/Navbar";
+import Register from "./routes/Register";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBGwtSUTJ_W9rO2QLcHWTfz76U9GOOPRi0",
@@ -129,6 +130,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
       {/* <Container>

@@ -9,14 +9,80 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
-// import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
 import Toolbar from "@mui/material/Toolbar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+
 import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
-const navItems = [<Link to="/">Home</Link>, <Link to="/about">About</Link>];
+const navItems = [
+  <Link style={{ color: "grey" }} id="home" to="/">
+    Home
+  </Link>,
+  <Link style={{ color: "grey" }} id="about" to="/about">
+    About
+  </Link>,
+  <Link style={{ color: "grey" }} id="register" to="/register">
+    Register
+  </Link>,
+  <BasicMenu id="basicMenu" />,
+];
+
+function BasicMenu() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <div
+        style={{ color: "grey" }}
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      >
+        CATEGORIES
+      </div>
+
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={handleClose}>Music</MenuItem>
+        <MenuItem onClick={handleClose}>Lifestyle</MenuItem>
+        <MenuItem onClick={handleClose}>Fashion</MenuItem>
+        <MenuItem onClick={handleClose}>Culture</MenuItem>
+        <MenuItem onClick={handleClose}>Fitness</MenuItem>
+        <MenuItem onClick={handleClose}>Travel</MenuItem>
+        <MenuItem onClick={handleClose}>Art</MenuItem>
+        <MenuItem onClick={handleClose}>Agriculture</MenuItem>
+        <MenuItem onClick={handleClose}>Design</MenuItem>
+        <MenuItem onClick={handleClose}>Food</MenuItem>
+        <MenuItem onClick={handleClose}>Politics</MenuItem>
+        <MenuItem onClick={handleClose}>Entertainment</MenuItem>
+        <MenuItem onClick={handleClose}>Sport</MenuItem>
+        <MenuItem onClick={handleClose}>Health</MenuItem>
+      </Menu>
+    </div>
+  );
+}
 
 const Navbar = (props) => {
   const { window } = props;
@@ -34,9 +100,9 @@ const Navbar = (props) => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.props.id} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
+              <ListItemText />
             </ListItemButton>
           </ListItem>
         ))}
@@ -49,36 +115,28 @@ const Navbar = (props) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar component="nav">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              textAlign: "left",
-              flexGrow: 1,
-              display: { xs: "none", sm: "block" },
-            }}
-          >
-            MUI
-          </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
+      <AppBar component="nav" style={{ background: "white" }}>
+        <Container>
+          <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              {navItems.map((item) => (
+                <Button key={item.props.id} sx={{ color: "#fff" }}>
+                  {item}
+                </Button>
+              ))}
+            </Box>
+            <SearchIcon style={{ color: "black" }} fontSize="large" />
+          </Toolbar>
+        </Container>
       </AppBar>
       <Box component="nav">
         <Drawer
