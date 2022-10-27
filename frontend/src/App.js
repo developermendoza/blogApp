@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 // import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import { initializeApp } from "firebase/app";
@@ -11,6 +15,9 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import Home from "./routes/Home";
+import About from "./routes/About";
+import Navbar from "./components/Navbar";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBGwtSUTJ_W9rO2QLcHWTfz76U9GOOPRi0",
@@ -110,53 +117,68 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Container> */}
-      <ul>
-        {posts.map((post) => (
-          <li key={post.id}>{post.title}</li>
-        ))}
-      </ul>
-      <form action="" onSubmit={handleNewPostSubmit}>
-        <input
-          type="text"
-          placeholder="Post Title"
-          value={newPost.title}
-          name="title"
-          onChange={handlePostChange}
-        />
-        <textarea
-          id=""
-          cols="30"
-          rows="10"
-          placeholder="Leave a post here"
-          style={{ height: "100px" }}
-          name="body"
-          value={newPost.body}
-          onChange={handlePostChange}
-        ></textarea>
-        <button type="submit">Submit Post</button>
-      </form>
+      <div>
+        {/* <Link to="/">Home</Link> */}
+        {/* <Link to="/about">About</Link> */}
+      </div>
+      <BrowserRouter>
+        <Navbar />
+        {/* <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Navbar /> */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </BrowserRouter>
+      {/* <Container>
+        <ul>
+          {posts.map((post) => (
+            <li key={post.id}>{post.title}</li>
+          ))}
+        </ul>
+        <form action="" onSubmit={handleNewPostSubmit}>
+          <input
+            type="text"
+            placeholder="Post Title"
+            value={newPost.title}
+            name="title"
+            onChange={handlePostChange}
+          />
+          <textarea
+            id=""
+            cols="30"
+            rows="10"
+            placeholder="Leave a post here"
+            style={{ height: "100px" }}
+            name="body"
+            value={newPost.body}
+            onChange={handlePostChange}
+          ></textarea>
+          <button type="submit">Submit Post</button>
+        </form>
 
-      <hr />
-      <form action="" onSubmit={handleSignupSubmit}>
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={newUser.email}
-          name="email"
-          onChange={handleNewUserChange}
-        />
+        <hr />
+        <form action="" onSubmit={handleSignupSubmit}>
+          <input
+            type="email"
+            placeholder="Enter email"
+            value={newUser.email}
+            name="email"
+            onChange={handleNewUserChange}
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          autoComplete="off"
-          name="password"
-          value={newUser.password}
-          onChange={handleNewUserChange}
-        />
-        <button type="submit">Register</button>
-      </form>
+          <input
+            type="password"
+            placeholder="Password"
+            autoComplete="off"
+            name="password"
+            value={newUser.password}
+            onChange={handleNewUserChange}
+          />
+          <button type="submit">Register</button>
+        </form>
+      </Container> */}
     </div>
   );
 }
