@@ -9,22 +9,40 @@ import {
   FormHelperText,
   Grid,
   Item,
+  Button,
   Container,
 } from "@mui/material";
 
 const Register = () => {
   return (
-    <Container>
-      <Box component="form" sx={{ p: 3, flexGrow: 1 }}>
-        <Toolbar />
+    <Container maxWidth="sm">
+      <Toolbar />
+      <div
+        style={{
+          width: "500px",
+          padding: "40px 40px 80px 40px",
+          margin: "auto",
+          background: "white",
+          border: "#e5e5e5 1px solid",
+          borderRadius: "5px",
+          marginTop: "100px",
+        }}
+      >
+        <h1>Create Account</h1>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <FormControl>
-              <TextField helperText="" id="email" label="Email" type="email" />
+            <FormControl fullWidth>
+              <TextField
+                fullWidth
+                helperText=""
+                id="email"
+                label="Email"
+                type="email"
+              />
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <FormControl>
+            <FormControl fullWidth>
               <TextField
                 helperText=""
                 id="password"
@@ -34,7 +52,7 @@ const Register = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <FormControl>
+            <FormControl fullWidth>
               <TextField
                 helperText=""
                 id="confirmPassword"
@@ -43,8 +61,20 @@ const Register = () => {
               />
             </FormControl>
           </Grid>
+          <Grid item xs={12}>
+            <Button
+              style={{
+                background: "#f64744",
+                color: "white",
+                fontSize: "18px",
+              }}
+              fullWidth
+            >
+              SIGN UP
+            </Button>
+          </Grid>
         </Grid>
-      </Box>
+      </div>
     </Container>
   );
 };
