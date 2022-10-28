@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
 import { db } from "../firebase";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
@@ -12,6 +13,9 @@ import {
   Container,
   fabClasses,
   formLabelClasses,
+  dividerClasses,
+  dialogClasses,
+  FormHelperText,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -19,6 +23,9 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import IconButton from "@mui/material/IconButton";
+import GoogleIcon from "@mui/icons-material/Google";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 db();
 
@@ -91,21 +98,20 @@ const Register = () => {
       <Toolbar />
       <div
         style={{
-          width: "500px",
           padding: "40px 40px 80px 40px",
-          margin: "auto",
           background: "white",
           border: "#e5e5e5 1px solid",
           borderRadius: "5px",
-          marginTop: "100px",
+          marginTop: "50px",
         }}
       >
         <h1>Create Account</h1>
-        <form action="" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <TextField
+                  required
                   fullWidth
                   helperText=""
                   error={error !== ""}
@@ -120,14 +126,20 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="outlined-adornment-password">
+                <InputLabel
+                  error={error !== ""}
+                  htmlFor="outlined-adornment-password"
+                  required
+                >
                   Password
                 </InputLabel>
                 <OutlinedInput
-                  id="outlined-adornment-password"
+                  id="password"
+                  error={error !== ""}
                   type={showPassword ? "text" : "password"}
                   value={newUser.password}
                   name="password"
+                  label="Password"
                   onChange={handleChange}
                   endAdornment={
                     <InputAdornment position="end">
@@ -141,8 +153,10 @@ const Register = () => {
                       </IconButton>
                     </InputAdornment>
                   }
-                  label="Password"
                 />
+                <FormHelperText>
+                  Password should be at least 6 characters
+                </FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -173,6 +187,62 @@ const Register = () => {
                 </Button>
               )}
               <p style={{ color: "red" }}>{error}</p>
+            </Grid>
+            <Grid item xs={12}>
+              <p
+                style={{
+                  display: "inline-block",
+                  background: "white",
+                  padding: "0 12px",
+                  marginTop: "-25px",
+                }}
+              >
+                OR
+              </p>
+              <div
+                style={{
+                  border: "1px solid #e5e5e5",
+                  width: "100%",
+                  marginTop: "-25px",
+                }}
+              ></div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={4} style={{ marginTop: "10px" }}>
+            <Grid item xs={4} style={{ textAlign: "right" }}>
+              <GoogleIcon
+                style={{
+                  color: "#db3236",
+                  fontSize: "40px",
+                  cursor: "pointer",
+                }}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <FacebookIcon
+                style={{
+                  color: "#3b5998",
+                  fontSize: "40px",
+                  cursor: "pointer",
+                }}
+              />
+            </Grid>
+            <Grid item xs={4} style={{ textAlign: "left" }}>
+              <LinkedInIcon
+                style={{
+                  color: "#0A66C2",
+                  fontSize: "40px",
+                  cursor: "pointer",
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={4} style={{ marginTop: "5px" }}>
+            <Grid item xs={12}>
+              <p style={{ color: "grey" }}>
+                Already have an account?{" "}
+                <span style={{ textDecoration: "underline" }}>LOGIN</span>
+              </p>
             </Grid>
           </Grid>
         </form>
