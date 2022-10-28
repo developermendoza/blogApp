@@ -1,0 +1,20 @@
+.registerFormWrapper {
+  padding: 40px 40px 80px 40px;
+  background: white;
+  border: #e5e5e5 1px solid;
+  border-radius: 5px;
+  margin-top: 50px;
+}
+
+.registerFormOr {
+  display: inline-block;
+  background: white;
+  padding: 0 12px;
+  margin-top: -25px;
+}
+
+.registerFormDevider {
+  border: 1px solid #e5e5e5;
+  width: 100%;
+  margin-top: -25px;
+}

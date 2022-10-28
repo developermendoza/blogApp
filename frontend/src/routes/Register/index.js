@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Toolbar from "@mui/material/Toolbar";
-import Box from "@mui/material/Box";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -11,10 +10,6 @@ import {
   Grid,
   Button,
   Container,
-  fabClasses,
-  formLabelClasses,
-  dividerClasses,
-  dialogClasses,
   FormHelperText,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
@@ -26,8 +21,7 @@ import IconButton from "@mui/material/IconButton";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-
-db();
+import styles from "./Register.module.css";
 
 const initialStateNewUser = {
   email: "",
@@ -63,6 +57,7 @@ const Register = () => {
       email: newUser.email,
       password: newUser.password,
     };
+    db();
     const auth = getAuth();
 
     createUserWithEmailAndPassword(
@@ -72,13 +67,15 @@ const Register = () => {
     )
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("user: ", user);
+        localStorage.setItem("userAuth", user);
 
         // navigate to a (private component) page where there is another form - profile -tells the user to fillout to start posting
         // save the email on the users database
         // it keeps the user logged in for 1 hour if idle
-        // /profile
-        // /new-post
+        // user/profile
+        // the profile will have a form - firstname, lastname, about, avatar, email, location, social media
+        // user/new-post
+        // user/posts
 
         setNewUser(initialStateNewUser);
         setError("");
@@ -96,28 +93,19 @@ const Register = () => {
   return (
     <Container maxWidth="sm">
       <Toolbar />
-      <div
-        style={{
-          padding: "40px 40px 80px 40px",
-          background: "white",
-          border: "#e5e5e5 1px solid",
-          borderRadius: "5px",
-          marginTop: "50px",
-        }}
-      >
+      <div className={styles.registerFormWrapper}>
         <h1>Create Account</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <TextField
-                  required
                   fullWidth
                   helperText=""
                   error={error !== ""}
                   id="email"
                   name="email"
-                  label="Email"
+                  label="Email *"
                   type="email"
                   value={newUser.email}
                   onChange={handleChange}
@@ -126,20 +114,15 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel
-                  error={error !== ""}
-                  htmlFor="outlined-adornment-password"
-                  required
-                >
-                  Password
-                </InputLabel>
+                <InputLabel error={error !== ""}>Password *</InputLabel>
                 <OutlinedInput
                   id="password"
                   error={error !== ""}
                   type={showPassword ? "text" : "password"}
                   value={newUser.password}
                   name="password"
-                  label="Password"
+                  label="Password *"
+                  autoComplete="off"
                   onChange={handleChange}
                   endAdornment={
                     <InputAdornment position="end">
@@ -176,10 +159,13 @@ const Register = () => {
               ) : (
                 <Button
                   type="submit"
-                  style={{
+                  sx={{
                     background: "#f64744",
                     color: "white",
                     fontSize: "18px",
+                    "&:hover": {
+                      background: "#F75F5C",
+                    },
                   }}
                   fullWidth
                 >
@@ -189,51 +175,25 @@ const Register = () => {
               <p style={{ color: "red" }}>{error}</p>
             </Grid>
             <Grid item xs={12}>
-              <p
-                style={{
-                  display: "inline-block",
-                  background: "white",
-                  padding: "0 12px",
-                  marginTop: "-25px",
-                }}
-              >
-                OR
-              </p>
-              <div
-                style={{
-                  border: "1px solid #e5e5e5",
-                  width: "100%",
-                  marginTop: "-25px",
-                }}
-              ></div>
+              <p className={styles.registerFormOr}>OR</p>
+              <div className={styles.registerFormDevider}></div>
             </Grid>
           </Grid>
           <Grid container spacing={4} style={{ marginTop: "10px" }}>
             <Grid item xs={4} style={{ textAlign: "right" }}>
               <GoogleIcon
-                style={{
-                  color: "#db3236",
-                  fontSize: "40px",
-                  cursor: "pointer",
-                }}
+                sx={{ fontSize: "40px", cursor: "pointer", color: "#db3236" }}
+                className={`${styles.registerSocialIcon} ${styles.google}`}
               />
             </Grid>
             <Grid item xs={4}>
               <FacebookIcon
-                style={{
-                  color: "#3b5998",
-                  fontSize: "40px",
-                  cursor: "pointer",
-                }}
+                sx={{ fontSize: "40px", cursor: "pointer", color: "#3b5998" }}
               />
             </Grid>
             <Grid item xs={4} style={{ textAlign: "left" }}>
               <LinkedInIcon
-                style={{
-                  color: "#0A66C2",
-                  fontSize: "40px",
-                  cursor: "pointer",
-                }}
+                sx={{ fontSize: "40px", cursor: "pointer", color: "#0a66c2" }}
               />
             </Grid>
           </Grid>

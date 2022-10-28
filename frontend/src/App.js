@@ -19,6 +19,8 @@ import Home from "./routes/Home";
 import About from "./routes/About";
 import Navbar from "./components/Navbar";
 import Register from "./routes/Register";
+import UserProfile from "./routes/UserProfile";
+import PrivateRoute from "./components/PrivateRoute";
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyBGwtSUTJ_W9rO2QLcHWTfz76U9GOOPRi0",
@@ -131,6 +133,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/user/profile"
+            element={
+              <PrivateRoute>
+                <UserProfile />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
       {/* <Container>
