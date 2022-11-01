@@ -20,6 +20,12 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -271,9 +277,12 @@ const Navbar = (props) => {
   const drawer = (
     <div>
       <Box sx={{ textAlign: "center" }} onClick={handleDrawerToggle}>
-        <Typography variant="h6" sx={{ my: 2 }}>
-          MUI
-        </Typography>
+        <Link to="/">
+          <Typography variant="h6" sx={{ my: 2 }}>
+            MUI
+          </Typography>
+        </Link>
+
         <Divider />
         <List>
           {mobileItems.map((item) => (
@@ -299,6 +308,30 @@ const Navbar = (props) => {
       {/* <div>top nav</div> */}
       <Box sx={{ display: "flex" }}>
         <AppBar component="nav" style={{ background: "white" }}>
+          <Container>
+            <Toolbar
+              sx={{
+                color: "grey",
+                display: { xs: "none", sm: "flex" },
+                justifyContent: "space-between",
+                borderBottom: "1px solid #eee",
+              }}
+            >
+              <div>
+                <FacebookOutlinedIcon
+                  sx={{ fontSize: "18px", padding: "6px 8px" }}
+                />
+                <TwitterIcon sx={{ fontSize: "18px", padding: "6px 8px" }} />
+                <InstagramIcon sx={{ fontSize: "18px", padding: "6px 8px" }} />
+                <YouTubeIcon sx={{ fontSize: "18px", padding: "6px 8px" }} />
+              </div>
+
+              <div>logo</div>
+              <div>
+                <AccountCircleIcon />
+              </div>
+            </Toolbar>
+          </Container>
           <Container>
             <Toolbar
               style={{ display: "flex", justifyContent: "space-between" }}
