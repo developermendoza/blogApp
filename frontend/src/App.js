@@ -22,6 +22,7 @@ import Register from "./routes/Register";
 import UserProfile from "./routes/UserProfile";
 import PrivateRoute from "./components/PrivateRoute";
 import TopNav from "./components/TopNav";
+import Logout from "./routes/Logout";
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyBGwtSUTJ_W9rO2QLcHWTfz76U9GOOPRi0",
@@ -135,6 +136,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/logout" element={<Logout />} />
           <Route
             path="/user/profile"
             element={
