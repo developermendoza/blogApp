@@ -21,8 +21,8 @@ import Navbar from "./components/Navbar";
 import Register from "./routes/Register";
 import UserProfile from "./routes/UserProfile";
 import PrivateRoute from "./components/PrivateRoute";
-import TopNav from "./components/TopNav";
 import Logout from "./routes/Logout";
+import Login from "./routes/Login";
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyBGwtSUTJ_W9rO2QLcHWTfz76U9GOOPRi0",
@@ -122,12 +122,7 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        {/* <Link to="/">Home</Link> */}
-        {/* <Link to="/about">About</Link> */}
-      </div>
       <BrowserRouter>
-        <TopNav />
         <Navbar />
         {/* <Link to="/">Home</Link>
         <Link to="/about">About</Link>
@@ -136,6 +131,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route
             path="/user/profile"

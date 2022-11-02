@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getAuth, signOut } from "firebase/auth";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -26,7 +27,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 const navItems = [
@@ -38,6 +39,9 @@ const navItems = [
   </Link>,
   <Link style={{ color: "grey" }} id="register" to="/register">
     Register
+  </Link>,
+  <Link style={{ color: "grey" }} id="login" to="/login">
+    Login
   </Link>,
   <BasicMenu id="basicMenu" />,
 ];
@@ -213,6 +217,9 @@ const mobileItems = [
   <Link style={{ color: "grey" }} id="register" to="/register">
     Register
   </Link>,
+  <Link style={{ color: "grey" }} id="login" to="/login">
+    Login
+  </Link>,
 ];
 
 function BasicMenu() {
@@ -268,7 +275,6 @@ function BasicMenu() {
 
 function UserMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -278,9 +284,17 @@ function UserMenu(props) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("userAuth");
     setAnchorEl(null);
-    window.location.href = "/logout";
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        localStorage.removeItem("userAuth");
+        window.location.href = "/logout";
+        console.log("success you've signed out");
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
   };
 
   return (
@@ -314,18 +328,11 @@ function UserMenu(props) {
 const Navbar = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const userAuth = localStorage.getItem("userAuth");
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  useEffect(() => {
-    const userAuth = localStorage.getItem("userAuth");
-    if (userAuth) {
-      setIsUserLoggedIn(true);
-    }
-  }, []);
 
   const drawer = (
     <div>
@@ -380,7 +387,7 @@ const Navbar = (props) => {
               </div>
 
               <div>logo</div>
-              {isUserLoggedIn && <UserMenu />}
+              {userAuth && <UserMenu />}
             </Toolbar>
           </Container>
           <Container>

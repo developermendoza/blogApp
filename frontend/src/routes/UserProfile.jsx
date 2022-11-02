@@ -1,7 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Box, Container, Toolbar } from "@mui/material";
 
 const UserProfile = () => {
-  return <div>UserProfile</div>;
+  return (
+    <Box as="main">
+      <Container>
+        <Toolbar />
+        <p>UserProfile</p>
+      </Container>
+    </Box>
+  );
 };
 
 export default UserProfile;

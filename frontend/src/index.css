@@ -16,3 +16,9 @@ code {
 a {
   text-decoration: none;
 }
+
+@media only screen and (min-width: 600px) {
+  main {
+    margin-top: 60px;
+  }
+}

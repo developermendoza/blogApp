@@ -3,7 +3,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { db } from "../../firebase";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {
   TextField,
   FormControl,
@@ -22,22 +22,22 @@ import IconButton from "@mui/material/IconButton";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import styles from "./Register.module.css";
+import styles from "./Login.module.css";
 
 const initialStateNewUser = {
   email: "",
   password: "",
 };
-const Register = () => {
-  const [newUser, setNewUser] = useState(initialStateNewUser);
+const Login = () => {
+  const [user, setUser] = useState(initialStateNewUser);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewUser({
-      ...newUser,
+    setUser({
+      ...user,
       [name]: value,
     });
   };
@@ -55,13 +55,13 @@ const Register = () => {
     setLoading(true);
 
     const submitNewUser = {
-      email: newUser.email,
-      password: newUser.password,
+      email: user.email,
+      password: user.password,
     };
     db();
     const auth = getAuth();
 
-    createUserWithEmailAndPassword(
+    signInWithEmailAndPassword(
       auth,
       submitNewUser.email,
       submitNewUser.password
@@ -86,8 +86,8 @@ const Register = () => {
     <Box as="main">
       <Container maxWidth="sm">
         <Toolbar />
-        <div className={styles.registerFormWrapper}>
-          <h1>Create Account</h1>
+        <div className={styles.loginFormWrapper}>
+          <h1>Login</h1>
           <form onSubmit={handleSubmit} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -100,7 +100,7 @@ const Register = () => {
                     name="email"
                     label="Email *"
                     type="email"
-                    value={newUser.email}
+                    value={user.email}
                     onChange={handleChange}
                   />
                 </FormControl>
@@ -112,7 +112,7 @@ const Register = () => {
                     id="password"
                     error={error !== ""}
                     type={showPassword ? "text" : "password"}
-                    value={newUser.password}
+                    value={user.password}
                     name="password"
                     label="Password *"
                     autoComplete="off"
@@ -147,7 +147,7 @@ const Register = () => {
                     startIcon={<SaveIcon />}
                     variant="outlined"
                   >
-                    SIGN UP
+                    Login
                   </LoadingButton>
                 ) : (
                   <Button
@@ -162,21 +162,21 @@ const Register = () => {
                     }}
                     fullWidth
                   >
-                    SIGN UP
+                    Login
                   </Button>
                 )}
                 <p style={{ color: "red" }}>{error}</p>
               </Grid>
               <Grid item xs={12}>
-                <p className={styles.registerFormOr}>OR</p>
-                <div className={styles.registerFormDevider}></div>
+                <p className={styles.loginFormOr}>OR</p>
+                <div className={styles.loginFormDevider}></div>
               </Grid>
             </Grid>
             <Grid container spacing={4} style={{ marginTop: "10px" }}>
               <Grid item xs={4} style={{ textAlign: "right" }}>
                 <GoogleIcon
                   sx={{ fontSize: "40px", cursor: "pointer", color: "#db3236" }}
-                  className={`${styles.registerSocialIcon} ${styles.google}`}
+                  className={`${styles.loginSocialIcon} ${styles.google}`}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -193,8 +193,8 @@ const Register = () => {
             <Grid container spacing={4} style={{ marginTop: "5px" }}>
               <Grid item xs={12}>
                 <p style={{ color: "grey" }}>
-                  Already have an account?{" "}
-                  <span style={{ textDecoration: "underline" }}>LOGIN</span>
+                  Don't have an account?{" "}
+                  <span style={{ textDecoration: "underline" }}>Register</span>
                 </p>
               </Grid>
             </Grid>
@@ -205,4 +205,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
