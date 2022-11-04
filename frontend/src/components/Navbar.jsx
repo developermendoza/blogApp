@@ -26,7 +26,8 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../features/user/authSlice";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -275,6 +276,7 @@ function BasicMenu() {
 }
 
 function UserMenu(props) {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
@@ -290,9 +292,8 @@ function UserMenu(props) {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        localStorage.removeItem("userAuth");
+        dispatch(logoutUser());
         navigate("/logout");
-        console.log("success you've signed out");
       })
       .catch((error) => {
         console.log("error: ", error);
