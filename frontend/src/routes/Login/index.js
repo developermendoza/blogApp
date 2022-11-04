@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Toolbar from "@mui/material/Toolbar";
-import { db } from "../../firebase";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -24,18 +23,26 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import styles from "./Login.module.css";
 
+import { useSelector, useDispatch } from "react-redux";
+import { authenticateUser } from "../../features/user/authSlice";
+import { useNavigate } from "react-router-dom";
+
 const initialStateNewUser = {
   email: "",
   password: "",
 };
 const Login = () => {
   const [user, setUser] = useState(initialStateNewUser);
+  let navigate = useNavigate();
+  // const user = useSelector((state) => state.login);
+  const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setUser({
       ...user,
       [name]: value,
@@ -54,23 +61,18 @@ const Login = () => {
 
     setLoading(true);
 
-    const submitNewUser = {
+    const submitUser = {
       email: user.email,
       password: user.password,
     };
-    db();
     const auth = getAuth();
 
-    signInWithEmailAndPassword(
-      auth,
-      submitNewUser.email,
-      submitNewUser.password
-    )
+    signInWithEmailAndPassword(auth, submitUser.email, submitUser.password)
       .then((userCredential) => {
         const user = userCredential.user;
-        localStorage.setItem("userAuth", user);
+        dispatch(authenticateUser(JSON.stringify(user)));
+        navigate("/user/profile");
         setError("");
-        window.location.href = "/user/profile";
       })
       .catch((error) => {
         const errorCode = error.code;

@@ -26,8 +26,9 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useSelector, useDispatch } from "react-redux";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 const navItems = [
@@ -275,6 +276,7 @@ function BasicMenu() {
 
 function UserMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -289,7 +291,7 @@ function UserMenu(props) {
     signOut(auth)
       .then(() => {
         localStorage.removeItem("userAuth");
-        window.location.href = "/logout";
+        navigate("/logout");
         console.log("success you've signed out");
       })
       .catch((error) => {
@@ -328,7 +330,8 @@ function UserMenu(props) {
 const Navbar = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const userAuth = localStorage.getItem("userAuth");
+  const userAuth = JSON.parse(localStorage.getItem("userAuth"));
+  const { auth } = useSelector((state) => state.auth);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -387,7 +390,8 @@ const Navbar = (props) => {
               </div>
 
               <div>logo</div>
-              {userAuth && <UserMenu />}
+              {(userAuth || auth) && <UserMenu />}
+              {/* {userAuth || (auth && <UserMenu />)} */}
             </Toolbar>
           </Container>
           <Container>
