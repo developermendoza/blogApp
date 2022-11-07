@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import Toolbar from "@mui/material/Toolbar";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
 import {
   TextField,
   FormControl,
@@ -39,6 +45,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const provider = new GoogleAuthProvider();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +54,30 @@ const Login = () => {
       ...user,
       [name]: value,
     });
+  };
+
+  const loginWithGoogle = () => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   };
 
   const handleClickShowPassword = () => {
@@ -179,6 +210,7 @@ const Login = () => {
                 <GoogleIcon
                   sx={{ fontSize: "40px", cursor: "pointer", color: "#db3236" }}
                   className={`${styles.loginSocialIcon} ${styles.google}`}
+                  onClick={loginWithGoogle}
                 />
               </Grid>
               <Grid item xs={4}>
