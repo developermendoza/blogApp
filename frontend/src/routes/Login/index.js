@@ -24,8 +24,9 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import styles from "./Login.module.css";
 
 import { useSelector, useDispatch } from "react-redux";
-import { authenticateUser } from "../../features/user/authSlice";
-import { useNavigate } from "react-router-dom";
+import { authenticateUser } from "../../redux/slices/userSlice";
+// import { authenticateUser } from "../../features/user/authSlice";
+import { useNavigate, Link } from "react-router-dom";
 
 const initialStateNewUser = {
   email: "",
@@ -34,7 +35,6 @@ const initialStateNewUser = {
 const Login = () => {
   const [user, setUser] = useState(initialStateNewUser);
   let navigate = useNavigate();
-  // const user = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -70,7 +70,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, submitUser.email, submitUser.password)
       .then((userCredential) => {
         const user = userCredential.user;
-        dispatch(authenticateUser(JSON.stringify(user)));
+        dispatch(authenticateUser(user));
         navigate("/user/profile");
         setError("");
       })
@@ -196,7 +196,9 @@ const Login = () => {
               <Grid item xs={12}>
                 <p style={{ color: "grey" }}>
                   Don't have an account?{" "}
-                  <span style={{ textDecoration: "underline" }}>Register</span>
+                  <span style={{ textDecoration: "underline" }}>
+                    <Link to="/register">Register</Link>
+                  </span>
                 </p>
               </Grid>
             </Grid>

@@ -8,10 +8,9 @@ import UserProfile from "./routes/UserProfile";
 import PrivateRoute from "./components/PrivateRoute";
 import Logout from "./routes/Logout";
 import Login from "./routes/Login";
+import AddPost from "./routes/AddPost";
 
 function App() {
-
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -27,6 +26,14 @@ function App() {
             element={
               <PrivateRoute>
                 <UserProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/user/add-post"
+            element={
+              <PrivateRoute>
+                <AddPost />
               </PrivateRoute>
             }
           />

@@ -4,6 +4,9 @@ import { db } from "../../firebase";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { authenticateUser } from "../../redux/slices/userSlice";
 import {
   TextField,
   FormControl,
@@ -13,6 +16,7 @@ import {
   FormHelperText,
   Box,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputLabel from "@mui/material/InputLabel";
@@ -22,6 +26,7 @@ import IconButton from "@mui/material/IconButton";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
 
 const initialStateNewUser = {
@@ -34,12 +39,32 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewUser({
       ...newUser,
       [name]: value,
     });
+  };
+
+  const addToUsersDb = async (user) => {
+    const docRef = doc(db, "users", user.uid);
+
+    const data = {
+      email: user.email,
+    };
+
+    setDoc(docRef, data)
+      .then((docRef) => {
+        console.log("Entire Document has been updated successfully");
+        console.log("docRef: ", docRef);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleClickShowPassword = () => {
@@ -58,8 +83,10 @@ const Register = () => {
       email: newUser.email,
       password: newUser.password,
     };
-    db();
+
     const auth = getAuth();
+
+    // addToUsersDb(submitNewUser);
 
     createUserWithEmailAndPassword(
       auth,
@@ -68,9 +95,10 @@ const Register = () => {
     )
       .then((userCredential) => {
         const user = userCredential.user;
-        localStorage.setItem("userAuth", user);
+        dispatch(authenticateUser(user));
+        addToUsersDb(user);
+        navigate("/user/profile");
         setError("");
-        window.location.href = "/user/profile";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -194,7 +222,9 @@ const Register = () => {
               <Grid item xs={12}>
                 <p style={{ color: "grey" }}>
                   Already have an account?{" "}
-                  <span style={{ textDecoration: "underline" }}>LOGIN</span>
+                  <span style={{ textDecoration: "underline" }}>
+                    <Link to="/login">LOGIN</Link>
+                  </span>
                 </p>
               </Grid>
             </Grid>

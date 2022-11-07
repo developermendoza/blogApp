@@ -27,7 +27,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../features/user/authSlice";
+import { logoutUser } from "../redux/slices/userSlice";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -320,9 +320,14 @@ function UserMenu(props) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to="/user/profile">Profile</Link>
+        </MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to="/user/add-post">Add Post</Link>
+        </MenuItem>
       </Menu>
     </div>
   );
@@ -331,8 +336,7 @@ function UserMenu(props) {
 const Navbar = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const userAuth = JSON.parse(localStorage.getItem("userAuth"));
-  const { auth } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.user);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -391,8 +395,7 @@ const Navbar = (props) => {
               </div>
 
               <div>logo</div>
-              {(userAuth || auth) && <UserMenu />}
-              {/* {userAuth || (auth && <UserMenu />)} */}
+              {user.isAuthenticated && <UserMenu />}
             </Toolbar>
           </Container>
           <Container>
