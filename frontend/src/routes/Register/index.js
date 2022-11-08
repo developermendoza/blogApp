@@ -60,7 +60,6 @@ const Register = () => {
     setDoc(docRef, data)
       .then((docRef) => {
         console.log("Entire Document has been updated successfully");
-        console.log("docRef: ", docRef);
       })
       .catch((error) => {
         console.log(error);
@@ -194,28 +193,6 @@ const Register = () => {
                   </Button>
                 )}
                 <p style={{ color: "red" }}>{error}</p>
-              </Grid>
-              <Grid item xs={12}>
-                <p className={styles.registerFormOr}>OR</p>
-                <div className={styles.registerFormDevider}></div>
-              </Grid>
-            </Grid>
-            <Grid container spacing={4} style={{ marginTop: "10px" }}>
-              <Grid item xs={4} style={{ textAlign: "right" }}>
-                <GoogleIcon
-                  sx={{ fontSize: "40px", cursor: "pointer", color: "#db3236" }}
-                  className={`${styles.registerSocialIcon} ${styles.google}`}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <FacebookIcon
-                  sx={{ fontSize: "40px", cursor: "pointer", color: "#3b5998" }}
-                />
-              </Grid>
-              <Grid item xs={4} style={{ textAlign: "left" }}>
-                <LinkedInIcon
-                  sx={{ fontSize: "40px", cursor: "pointer", color: "#0a66c2" }}
-                />
               </Grid>
             </Grid>
             <Grid container spacing={4} style={{ marginTop: "5px" }}>

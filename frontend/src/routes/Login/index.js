@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import Toolbar from "@mui/material/Toolbar";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
+import { db } from "../../firebase";
 import {
   getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
 } from "firebase/auth";
+import { getDoc, setDoc, doc } from "firebase/firestore";
 import {
   TextField,
   FormControl,
@@ -29,9 +30,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import styles from "./Login.module.css";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authenticateUser } from "../../redux/slices/userSlice";
-// import { authenticateUser } from "../../features/user/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 
 const initialStateNewUser = {
@@ -45,7 +45,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const provider = new GoogleAuthProvider();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,9 +55,31 @@ const Login = () => {
     });
   };
 
+  const doesUserExist = async (user) => {
+    const docRef = doc(db(), "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return;
+    } else {
+      const data = {
+        email: user.email,
+      };
+
+      setDoc(docRef, data)
+        .then((docRef) => {
+          console.log("Entire Document has been updated successfully");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   const loginWithGoogle = () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
+
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -66,17 +87,24 @@ const Login = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        // ...
+
+        doesUserExist(user);
+
+        dispatch(authenticateUser(user));
+        navigate("/user/profile");
+        setError("");
       })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
+        setError(errorMessage);
         // The email of the user's account used.
         const email = error.customData.email;
+        setError(email);
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        setError(credential);
       });
   };
 
@@ -163,9 +191,6 @@ const Login = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText>
-                    Password should be at least 6 characters
-                  </FormHelperText>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
