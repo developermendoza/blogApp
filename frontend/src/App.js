@@ -9,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Logout from "./routes/Logout";
 import Login from "./routes/Login";
 import AddPost from "./routes/AddPost";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </div>
   );
 }
